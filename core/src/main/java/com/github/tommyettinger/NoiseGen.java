@@ -10,6 +10,7 @@ public class NoiseGen extends ApplicationAdapter {
     public Noise noise;
     public int width = 512;
     public int height = 512;
+    public String output = "noise.png";
 
     public NoiseGen() {
         noise = new Noise();
@@ -22,6 +23,12 @@ public class NoiseGen extends ApplicationAdapter {
         width = w;
         height = h;
     }
+    public NoiseGen(Noise n, int w, int h, String out) {
+        noise = n;
+        width = w;
+        height = h;
+        output = out;
+    }
 
     @Override
     public void create() {
@@ -32,8 +39,7 @@ public class NoiseGen extends ApplicationAdapter {
                 pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
             }
         }
-        PixmapIO.writePNG(Gdx.files.local("noise.png"), pm);
-        System.out.println("Done!");
+        PixmapIO.writePNG(Gdx.files.local(output), pm);
         System.exit(0);
     }
 }
