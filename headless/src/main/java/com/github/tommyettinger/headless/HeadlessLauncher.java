@@ -41,6 +41,12 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-c", "--cellular"}, description = "The cellular return type to use for the cellular type; one of: value, lookup, distance, distance2, distance2add, distance2mul, distance2div.", defaultValue = "value")
 	public String cellular = "value";
 
+	@CommandLine.Option(names = {"-S", "--sharpness"}, description = "The sharpness multiplier for foam and mutant noise; higher than one means more extreme.", defaultValue = "1")
+	public float sharpness = 1f;
+
+	@CommandLine.Option(names = {"-m", "--mutation"}, description = "The extra 'spatial' value used by mutant noise; can be any float.", defaultValue = "0")
+	public float mutation = 0f;
+
 	@CommandLine.Option(names = {"-o", "--output"}, description = "The name and/or path for the output file.", defaultValue = "noise.png")
 	public String output = "noise.png";
 
@@ -97,6 +103,8 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setFractalType(parseFractal(fractal));
 		noise.setCellularReturnType(parseCellular(cellular));
 		noise.setFractalOctaves(octaves);
+		noise.setFoamSharpness(sharpness);
+		noise.setMutation(mutation);
 		new HeadlessApplication(new NoiseGen(noise, width, height, output), configuration){
 			{
 				try {
