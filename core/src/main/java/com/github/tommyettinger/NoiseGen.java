@@ -35,7 +35,7 @@ public class NoiseGen extends ApplicationAdapter {
         Pixmap pm = new Pixmap(width, height, Pixmap.Format.RGB888);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int v = (int)(noise.getConfiguredNoise(x, y) * 127.999f + 127.999f);
+                int v = Math.min(Math.max((int)(noise.getConfiguredNoise(x, y) * 127.999f + 127.999f), 0), 255);
                 pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
             }
         }

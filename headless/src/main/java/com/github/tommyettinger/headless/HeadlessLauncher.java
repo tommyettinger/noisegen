@@ -38,6 +38,9 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-F", "--fractal"}, description = "The fractal mode to use for most noise types; one of: fbm, billow, ridged.", defaultValue = "fbm")
 	public String fractal = "fbm";
 
+	@CommandLine.Option(names = {"-c", "--cellular"}, description = "The cellular return type to use for the cellular type; one of: value, lookup, distance, distance2, distance2add, distance2mul, distance2div.", defaultValue = "value")
+	public String cellular = "value";
+
 	@CommandLine.Option(names = {"-o", "--output"}, description = "The name and/or path for the output file.", defaultValue = "noise.png")
 	public String output = "noise.png";
 
@@ -65,6 +68,20 @@ public class HeadlessLauncher implements Callable<Integer> {
 		}
 	}
 
+	public int parseCellular(String t) {
+		t = t.toLowerCase();
+		switch (t) {
+			case "lookup": return Noise.NOISE_LOOKUP;
+			case "distance": return Noise.DISTANCE;
+			case "distance2": return Noise.DISTANCE_2;
+			case "distance2add": return Noise.DISTANCE_2_ADD;
+			case "distance2sub": return Noise.DISTANCE_2_SUB;
+			case "distance2mul": return Noise.DISTANCE_2_MUL;
+			case "distance2div": return Noise.DISTANCE_2_DIV;
+			default: return Noise.CELL_VALUE;
+		}
+	}
+
 	public static void main(String[] args) {
 		int exitCode = new picocli.CommandLine(new HeadlessLauncher()).execute(args);
 		System.exit(exitCode);
@@ -78,6 +95,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setSeed(seed);
 		noise.setNoiseType(parseType(type));
 		noise.setFractalType(parseFractal(fractal));
+		noise.setCellularReturnType(parseCellular(cellular));
 		noise.setFractalOctaves(octaves);
 		new HeadlessApplication(new NoiseGen(noise, width, height, output), configuration){
 			{
