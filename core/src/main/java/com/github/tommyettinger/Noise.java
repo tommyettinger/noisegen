@@ -29,6 +29,8 @@
 
 package com.github.tommyettinger;
 
+import com.badlogic.gdx.utils.NumberUtils;
+
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
  * FastNoise library, the implementation here is meant to be fast without sacrificing quality. Usage requires a Noise
@@ -1448,22 +1450,12 @@ public class Noise {
     // White Noise
 
     /**
-     * Gets the bit representation of a float with {@link Float#floatToIntBits(float)} and mixes its
-     * typically-more-varied high bits with its low bits, returning an int. NOTE: if you target GWT,
-     * this method will be unnecessarily slow because of GWT's poor implementation of floatToIntBits.
-     * If you use libGDX and want to use the white noise methods here, you should extend this class
-     * and override this method like so:
-     * <pre><code>
-     * public int floatToIntMixed(final float f) {
-     *     final int i = com.badlogic.gdx.utils.NumberUtils.floatToIntBits(f);
-     *     return i ^ i >>> 16;
-     * }
-     * </code></pre>
-     * @param f can be any float except for NaN, though this will technically work on NaN
+     * Gets the bit representation of a float with {@link NumberUtils#floatToIntBits(float)} and
+     * mixes its typically-more-varied high bits with its low bits, returning an int.     * @param f can be any float except for NaN, though this will technically work on NaN
      * @return a slightly-mixed version of the bits that make up {@code f}, as an int
      */
     public int floatToIntMixed(final float f) {
-        final int i = Float.floatToIntBits(f);
+        final int i = NumberUtils.floatToRawIntBits(f);
         return i ^ i >>> 16;
     }
 

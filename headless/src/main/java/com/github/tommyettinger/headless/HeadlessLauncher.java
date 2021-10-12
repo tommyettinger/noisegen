@@ -44,6 +44,12 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-S", "--sharpness"}, description = "The sharpness multiplier for foam and mutant noise; higher than one means more extreme.", defaultValue = "1")
 	public float sharpness = 1f;
 
+	@CommandLine.Option(names = {"-C", "--curvature"}, description = "How steep the transition should be from black to white; must be positive.", defaultValue = "1")
+	public float curvature = 1f;
+
+	@CommandLine.Option(names = {"-M", "--middle"}, description = "When curvature is not 1.0, this determines where the noise starts to turn its curve; must be between 0 and 1 inclusive", defaultValue = "0.5")
+	public float middle = 0.5f;
+
 	@CommandLine.Option(names = {"-m", "--mutation"}, description = "The extra 'spatial' value used by mutant noise; can be any float.", defaultValue = "0")
 	public float mutation = 0f;
 
@@ -105,7 +111,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setFractalOctaves(octaves);
 		noise.setFoamSharpness(sharpness);
 		noise.setMutation(mutation);
-		new HeadlessApplication(new NoiseGen(noise, width, height, output), configuration){
+		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, output), configuration){
 			{
 				try {
 					mainLoopThread.join(30000L);
