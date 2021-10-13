@@ -30,6 +30,7 @@
 package com.github.tommyettinger;
 
 import com.badlogic.gdx.utils.NumberUtils;
+import com.github.tommyettinger.bluegrass.BlueNoise;
 
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
@@ -211,7 +212,15 @@ public class Noise {
      * <br>
      * This is meant to be used with {@link #setNoiseType(int)}.
      */
-    MUTANT_FRACTAL = 15;
+    MUTANT_FRACTAL = 15,
+    /**
+     * Chaotic but amorphous noise that avoids large-scale patterns. 2D-only.
+     * <br>
+     * <a href="https://i.imgur.com/VZyuAAn.png">Noise sample at left, FFT at right.</a>
+     * <br>
+     * This is meant to be used with {@link #setNoiseType(int)}.
+     */
+    BLUE_NOISE = 16;
 
     /**
      * Simple linear interpolation. May result in artificial-looking noise.
@@ -969,6 +978,8 @@ public class Noise {
         y *= frequency;
 
         switch (noiseType) {
+            case BLUE_NOISE:
+                return (BlueNoise.getSeeded(Math.round(x), Math.round(y), seed) + 0.5f) / 127.5f;
             case VALUE:
                 return singleValue(seed, x, y);
             case VALUE_FRACTAL:

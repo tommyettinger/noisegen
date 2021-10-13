@@ -67,6 +67,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 			case "value": return Noise.VALUE_FRACTAL;
 			case "white": return Noise.WHITE_NOISE;
 			case "cellular": return Noise.CELLULAR;
+			case "blue": return Noise.BLUE_NOISE;
 			default: return Noise.SIMPLEX_FRACTAL;
 		}
 	}
@@ -106,6 +107,8 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setFrequency(frequency);
 		noise.setSeed(seed);
 		noise.setNoiseType(parseType(type));
+		if(noise.getNoiseType() == Noise.BLUE_NOISE)
+			noise.setFrequency(1f);
 		noise.setFractalType(parseFractal(fractal));
 		noise.setCellularReturnType(parseCellular(cellular));
 		noise.setFractalOctaves(octaves);
