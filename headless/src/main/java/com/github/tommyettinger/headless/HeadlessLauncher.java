@@ -11,7 +11,7 @@ import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "noisegen", version = "NoiseGen 0.0.1",
-		description = "Generate noise and write it to images",
+		description = "Generate noise and write it to an image file.",
 		mixinStandardHelpOptions = true)
 public class HeadlessLauncher implements Callable<Integer> {
 
@@ -47,7 +47,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-C", "--curvature"}, description = "How steep the transition should be from black to white; must be positive.", defaultValue = "1")
 	public float curvature = 1f;
 
-	@CommandLine.Option(names = {"-M", "--middle"}, description = "When curvature is not 1.0, this determines where the noise starts to turn its curve; must be between 0 and 1 inclusive", defaultValue = "0.5")
+	@CommandLine.Option(names = {"-M", "--middle"}, description = "When curvature is not 1.0, this determines where the noise starts to turn its curve; must be between 0 and 1, inclusive.", defaultValue = "0.5")
 	public float middle = 0.5f;
 
 	@CommandLine.Option(names = {"-m", "--mutation"}, description = "The extra 'spatial' value used by mutant noise; can be any float.", defaultValue = "0")
