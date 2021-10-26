@@ -56,6 +56,9 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-o", "--output"}, description = "The name and/or path for the output file.", defaultValue = "noise.png")
 	public String output = "noise.png";
 
+	@CommandLine.Option(names = {"-d", "--debug"}, description = "If true, draws higher-than-1 noise as red, and lower-than-negative-1 as blue.", defaultValue = "false")
+	public boolean debug = false;
+
 	public int parseType(String t) {
 		t = t.toLowerCase();
 		switch (t) {
@@ -114,7 +117,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setFractalOctaves(octaves);
 		noise.setFoamSharpness(sharpness);
 		noise.setMutation(mutation);
-		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, output), configuration){
+		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, debug, output), configuration){
 			{
 				try {
 					mainLoopThread.join(30000L);

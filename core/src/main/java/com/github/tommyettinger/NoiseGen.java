@@ -15,6 +15,8 @@ public class NoiseGen extends ApplicationAdapter {
     public float middle = 0.5f;
     public String output = "noise.png";
 
+    public boolean debug = true;
+
     public NoiseGen() {
         noise = new Noise();
     }
@@ -26,12 +28,13 @@ public class NoiseGen extends ApplicationAdapter {
         width = w;
         height = h;
     }
-    public NoiseGen(Noise n, int w, int h, float curvature, float middle, String out) {
+    public NoiseGen(Noise n, int w, int h, float curvature, float middle, boolean debug, String out) {
         noise = n;
         width = w;
         height = h;
         this.curvature = curvature;
         this.middle = middle;
+        this.debug = debug;
         output = out;
     }
     /**
@@ -62,16 +65,38 @@ public class NoiseGen extends ApplicationAdapter {
         if(curvature == 1f){
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    int v = Math.min(Math.max((int)(noise.getConfiguredNoise(x, y) * 127.999f + 127.999f), 0), 255);
-                    pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                    if(debug) {
+                        int v = (int) (noise.getConfiguredNoise(x, y) * 127.999f + 127.999f);
+                        if ((v & -256) == 256)
+                            pm.drawPixel(x, y, 0xFF0000FF);
+                        else if (v < 0)
+                            pm.drawPixel(x, y, 0x0000FFFF);
+                        else
+                            pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                    }
+                    else {
+                        int v = Math.min(Math.max((int)(noise.getConfiguredNoise(x, y) * 127.999f + 127.999f), 0), 255);
+                        pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                    }
                 }
             }
         }
         else {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    int v = Math.min(Math.max((int)(255.999f*barronSpline(noise.getConfiguredNoise(x, y) * 0.5f + 0.5f, curvature, middle)), 0), 255);
-                    pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                    if(debug) {
+                        int v = (int) (255.999f * barronSpline(noise.getConfiguredNoise(x, y) * 0.5f + 0.5f, curvature, middle));
+                        if ((v & -256) == 256)
+                            pm.drawPixel(x, y, 0xFF0000FF);
+                        else if (v < 0)
+                            pm.drawPixel(x, y, 0x0000FFFF);
+                        else
+                            pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                    }
+                    else {
+                        int v = Math.min(Math.max((int)(255.999f*barronSpline(noise.getConfiguredNoise(x, y) * 0.5f + 0.5f, curvature, middle)), 0), 255);
+                        pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                    }
                 }
             }
         }
