@@ -66,7 +66,7 @@ public class NoiseGen extends ApplicationAdapter {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     if(debug) {
-                        int v = (int) (noise.getConfiguredNoise(x, y) * 127.999f + 127.999f);
+                        int v = (int) (255.999f * (noise.getConfiguredNoise(x, y) * 0.5f + 0.5f));
                         if ((v & -256) == 256)
                             pm.drawPixel(x, y, 0xFF0000FF);
                         else if (v < 0)
@@ -75,7 +75,7 @@ public class NoiseGen extends ApplicationAdapter {
                             pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
                     }
                     else {
-                        int v = Math.min(Math.max((int)(noise.getConfiguredNoise(x, y) * 127.999f + 127.999f), 0), 255);
+                        int v = Math.min(Math.max((int)(255.999f * (noise.getConfiguredNoise(x, y) * 0.5f + 0.5f)), 0), 255);
                         pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
                     }
                 }
