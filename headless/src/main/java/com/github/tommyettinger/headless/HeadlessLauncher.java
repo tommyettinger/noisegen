@@ -59,6 +59,9 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-d", "--debug"}, description = "If true, draws higher-than-1 noise as red, and lower-than-negative-1 as blue.", defaultValue = "false")
 	public boolean debug = false;
 
+	@CommandLine.Option(names = {"-e", "--equalize"}, description = "If true, makes each grayscale value approximately as frequent as all other values.", defaultValue = "false")
+	public boolean equalize = false;
+
 	public int parseType(String t) {
 		t = t.toLowerCase();
 		switch (t) {
@@ -117,7 +120,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setFractalOctaves(octaves);
 		noise.setFoamSharpness(sharpness);
 		noise.setMutation(mutation);
-		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, debug, output), configuration){
+		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, debug, equalize, output), configuration){
 			{
 				try {
 					mainLoopThread.join(30000L);

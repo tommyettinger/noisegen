@@ -16,6 +16,7 @@ public class NoiseGen extends ApplicationAdapter {
     public String output = "noise.png";
 
     public boolean debug = true;
+    public boolean equalize = true;
 
     public NoiseGen() {
         noise = new Noise();
@@ -28,13 +29,14 @@ public class NoiseGen extends ApplicationAdapter {
         width = w;
         height = h;
     }
-    public NoiseGen(Noise n, int w, int h, float curvature, float middle, boolean debug, String out) {
+    public NoiseGen(Noise n, int w, int h, float curvature, float middle, boolean debug, boolean equalize, String out) {
         noise = n;
         width = w;
         height = h;
         this.curvature = curvature;
         this.middle = middle;
         this.debug = debug;
+        this.equalize = equalize;
         output = out;
     }
     /**
@@ -57,6 +59,45 @@ public class NoiseGen extends ApplicationAdapter {
         final float d = turning - x;
         final int f = NumberUtils.floatToRawIntBits(d) >> 31, n = f | 1;
         return ((turning * n - f) * (x + f)) / (Float.MIN_NORMAL - f + (x + shape * d) * n) - f;
+    }
+    public Pixmap equalize(Pixmap pm)
+    {
+        final int w = pm.getWidth();
+        final int h = pm.getHeight();
+        float area = (w * h - 1f);
+        if((w == 1 && h == 1) || w == 0 || h == 0)
+            return pm;
+        float[] lumas = new float[256];
+        int c, t;
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                c = pm.getPixel(x, y);
+                if((c & 0x80) != 0)
+                    lumas[c >>> 24]++;
+                else
+                    area--;
+            }
+        }
+        final float invArea = 255f / area;
+
+        c = 0;
+        for (int i = 0; i < 256; i++) {
+            if(c != (c += lumas[i])) // hoo boy. if this luma showed up at least once, add its frequency to c and run.
+            {
+                lumas[i] = c * invArea;
+            }
+        }
+        int luma;
+
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                c = pm.getPixel(x, y);
+                t = (c >>> 24);
+                luma = (int)Math.min(Math.max(lumas[t], 0), 255);
+                pm.drawPixel(x, y, luma << 24 | luma << 16 | luma << 8 | 0xFF);
+            }
+        }
+        return pm;
     }
 
     @Override
@@ -100,6 +141,7 @@ public class NoiseGen extends ApplicationAdapter {
                 }
             }
         }
+        if(equalize) equalize(pm);
         PixmapIO.writePNG(Gdx.files.local(output), pm);
         System.exit(0);
     }

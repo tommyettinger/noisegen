@@ -9,4 +9,4 @@ C:\d\jvm\graal16\bin\native-image.cmd ^
 -H:SerializationConfigurationFiles=config/serialization-config.json ^
 -H:ResourceConfigurationFiles=config/resource-config.json ^
 -Dorg.lwjgl.librarypath=. ^
--jar noisegen-0.0.1.jar
+-jar noisegen-0.1.1.jar

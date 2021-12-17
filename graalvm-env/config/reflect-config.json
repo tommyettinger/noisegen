@@ -1,80 +1,101 @@
 [
 {
-  "name":"com.badlogic.gdx.graphics.Color",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"com.github.tommyettinger.headless.HeadlessLauncher",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
 },
 {
-  "name":"com.badlogic.gdx.graphics.g2d.GlyphLayout",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"java.lang.Object",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
 },
 {
-  "name":"com.badlogic.gdx.graphics.g2d.GlyphLayout$GlyphRun",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-  {
-    "name" : "com.github.tommyettinger.headless.HeadlessLauncher",
-    "allDeclaredConstructors" : true,
-    "allPublicConstructors" : true,
-    "allDeclaredMethods" : true,
-    "allPublicMethods" : true,
-    "fields" : [
-      { "name" : "cellular" },
-      { "name" : "curvature" },
-      { "name" : "fractal" },
-      { "name" : "frequency" },
-      { "name" : "height" },
-      { "name" : "middle" },
-      { "name" : "mutation" },
-      { "name" : "octaves" },
-      { "name" : "output" },
-      { "name" : "seed" },
-      { "name" : "sharpness" },
-      { "name" : "type" },
-      { "name" : "width" }
-    ]
-  },
-  {
-    "name" : "picocli.CommandLine$AutoHelpMixin",
-    "allDeclaredConstructors" : true,
-    "allPublicConstructors" : true,
-    "allDeclaredMethods" : true,
-    "allPublicMethods" : true,
-    "fields" : [
-      { "name" : "helpRequested" },
-      { "name" : "versionRequested" }
-    ]
-  },
-{
-  "name":"java.lang.ClassLoader",
-  "methods":[{"name":"defineClass","parameterTypes":["java.lang.String","byte[]","int","int","java.security.ProtectionDomain"] }]
+  "name":"java.nio.file.Path"
 },
 {
-  "name":"java.lang.Object[]"
+  "name":"java.nio.file.Paths",
+  "methods":[{"name":"get","parameterTypes":["java.lang.String","java.lang.String[]"] }]
 },
 {
-  "name":"java.nio.DirectByteBuffer",
-  "methods":[{"name":"<init>","parameterTypes":["long","int","java.lang.Object"] }]
+  "name":"java.sql.Connection"
 },
 {
-  "name":"java.security.MessageDigestSpi"
+  "name":"java.sql.Driver"
 },
 {
-  "name":"java.security.SecureRandomParameters"
+  "name":"java.sql.DriverManager",
+  "methods":[
+    {"name":"getConnection","parameterTypes":["java.lang.String"] }, 
+    {"name":"getDriver","parameterTypes":["java.lang.String"] }
+  ]
 },
 {
-  "name":"sun.misc.Unsafe",
-  "allDeclaredFields":true
+  "name":"java.sql.Time",
+  "methods":[{"name":"<init>","parameterTypes":["long"] }]
 },
 {
-  "name":"sun.security.provider.DRBG",
-  "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+  "name":"java.sql.Timestamp",
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
-  "name":"sun.security.provider.SHA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"java.time.Duration",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
 },
 {
-  "name":"sun.security.provider.SHA2$SHA256",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "name":"java.time.Instant",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.LocalDate",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.LocalDateTime",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.LocalTime",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.MonthDay",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.OffsetDateTime",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.OffsetTime",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.Period",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.Year",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.YearMonth",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"java.time.ZoneId",
+  "methods":[{"name":"of","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.time.ZoneOffset",
+  "methods":[{"name":"of","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.time.ZonedDateTime",
+  "methods":[{"name":"parse","parameterTypes":["java.lang.CharSequence"] }]
+},
+{
+  "name":"picocli.CommandLine$AutoHelpMixin",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
 }
 ]
