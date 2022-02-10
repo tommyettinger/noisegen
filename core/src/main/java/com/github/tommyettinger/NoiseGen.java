@@ -60,13 +60,19 @@ public class NoiseGen extends ApplicationAdapter {
         final int f = NumberUtils.floatToRawIntBits(d) >> 31, n = f | 1;
         return ((turning * n - f) * (x + f)) / (Float.MIN_NORMAL - f + (x + shape * d) * n) - f;
     }
-    public Pixmap equalize(Pixmap pm)
+
+    /**
+     * Equalizes the lightness for a grayscale image, attempting to ensure that the darkest color is black
+     * and the lightest color is white, with grays in-between evenly distributed. Modifies its argument in-place.
+     * @param pm a Pixmap that will be modified in-place
+     */
+    public void equalize(Pixmap pm)
     {
         final int w = pm.getWidth();
         final int h = pm.getHeight();
         float area = (w * h - 1f);
         if((w == 1 && h == 1) || w == 0 || h == 0)
-            return pm;
+            return;
         float[] lumas = new float[256];
         int c, t;
         for (int x = 0; x < w; x++) {
@@ -97,7 +103,6 @@ public class NoiseGen extends ApplicationAdapter {
                 pm.drawPixel(x, y, luma << 24 | luma << 16 | luma << 8 | 0xFF);
             }
         }
-        return pm;
     }
 
     @Override
