@@ -123,7 +123,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, debug, equalize, output), configuration){
 			{
 				try {
-					mainLoopThread.join(30000L);
+					mainLoopThread.join(300000L); // 5 minutes
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
