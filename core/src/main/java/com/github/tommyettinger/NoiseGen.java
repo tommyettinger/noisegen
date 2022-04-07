@@ -75,15 +75,15 @@ public class NoiseGen extends ApplicationAdapter {
         if(len <= 1)
             return;
         float area = (len - 1f);
-        float[] lumas = new float[256];
+        float[] lumas = new float[1024];
         int c, t;
         for (int p = 0; p < len; p++) {
-            lumas[Math.min(Math.max((int)(255.999f * pm[p]), 0), 255)]++;
+            lumas[Math.min(Math.max((int)(1023.999f * pm[p]), 0), 1023)]++;
         }
-        final float invArea = 255f / area;
+        final float invArea = 1023f / area;
 
         c = 0;
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < 1024; i++) {
             if(c != (c += lumas[i])) // hoo boy. if this luma showed up at least once, add its frequency to c and run.
             {
                 lumas[i] = c * invArea;
@@ -93,9 +93,9 @@ public class NoiseGen extends ApplicationAdapter {
 
 
         for (int p = 0; p < len; p++) {
-            t = Math.min(Math.max((int)(255.999f * pm[p]), 0), 255);
-            luma = (int)Math.min(Math.max(lumas[t], 0), 255);
-            pm[p] = luma / 255f;
+            t = Math.min(Math.max((int)(1023.999f * pm[p]), 0), 1023);
+            luma = (int)Math.min(Math.max(lumas[t], 0), 1023);
+            pm[p] = luma / 1023f;
         }
     }
 
