@@ -11,10 +11,15 @@ public class GaussianBlur {
     private float[] kernel;
     private double sigma = 1.8;
     private float min = 0;
-    private float max = 255;
+    private float max = 1;
 
     public GaussianBlur() {
         kernel = new float[0];
+    }
+
+    public GaussianBlur(float sigma) {
+        kernel = new float[0];
+        this.sigma = sigma;
     }
 
     public void setSigma(double a) {
@@ -27,6 +32,7 @@ public class GaussianBlur {
     }
 
     public float[] filter(final float[] levelData, final int width, final int height) {
+        if(sigma <= 0f) return levelData;
 
         final int size = width * height;
 
