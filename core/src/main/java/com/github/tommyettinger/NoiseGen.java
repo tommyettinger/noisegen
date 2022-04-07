@@ -66,23 +66,16 @@ public class NoiseGen extends ApplicationAdapter {
      * and the lightest color is white, with grays in-between evenly distributed. Modifies its argument in-place.
      * @param pm a Pixmap that will be modified in-place
      */
-    public void equalize(Pixmap pm)
+    public void equalize(float[] pm)
     {
-        final int w = pm.getWidth();
-        final int h = pm.getHeight();
-        float area = (w * h - 1f);
-        if((w == 1 && h == 1) || w == 0 || h == 0)
+        int len = pm.length;
+        if(len <= 1)
             return;
+        float area = (len - 1f);
         float[] lumas = new float[256];
         int c, t;
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
-                c = pm.getPixel(x, y);
-                if((c & 0x80) != 0)
-                    lumas[c >>> 24]++;
-                else
-                    area--;
-            }
+        for (int p = 0; p < len; p++) {
+            lumas[Math.min(Math.max((int)(255.999f * pm[p]), 0), 255)]++;
         }
         final float invArea = 255f / area;
 
@@ -95,58 +88,54 @@ public class NoiseGen extends ApplicationAdapter {
         }
         int luma;
 
-        for (int x = 0; x < w; x++) {
-            for (int y = 0; y < h; y++) {
-                c = pm.getPixel(x, y);
-                t = (c >>> 24);
-                luma = (int)Math.min(Math.max(lumas[t], 0), 255);
-                pm.drawPixel(x, y, luma << 24 | luma << 16 | luma << 8 | 0xFF);
-            }
+
+        for (int p = 0; p < len; p++) {
+            t = Math.min(Math.max((int)(255.999f * pm[p]), 0), 255);
+            luma = (int)Math.min(Math.max(lumas[t], 0), 255);
+            pm[p] = luma / 255f;
         }
     }
 
     @Override
     public void create() {
         Pixmap pm = new Pixmap(width, height, Pixmap.Format.RGB888);
-        if(curvature == 1f){
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    if(debug) {
-                        int v = (int) (255.999f * (noise.getConfiguredNoise(x, y) * 0.5f + 0.5f));
-                        if ((v & -256) == 256)
-                            pm.drawPixel(x, y, 0xFF0000FF);
-                        else if (v < 0)
-                            pm.drawPixel(x, y, 0x0000FFFF);
-                        else
-                            pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
-                    }
-                    else {
-                        int v = Math.min(Math.max((int)(255.999f * (noise.getConfiguredNoise(x, y) * 0.5f + 0.5f)), 0), 255);
-                        pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
-                    }
+        float[] levels = new float[width * height];
+        if(curvature == 1f) {
+            for (int y = 0, idx = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    levels[idx++] = noise.getConfiguredNoise(x, y) * 0.5f + 0.5f;
                 }
             }
         }
         else {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    if(debug) {
-                        int v = (int) (255.999f * barronSpline(noise.getConfiguredNoise(x, y) * 0.5f + 0.5f, curvature, middle));
-                        if ((v & -256) == 256)
-                            pm.drawPixel(x, y, 0xFF0000FF);
-                        else if (v < 0)
-                            pm.drawPixel(x, y, 0x0000FFFF);
-                        else
-                            pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
-                    }
-                    else {
-                        int v = Math.min(Math.max((int)(255.999f*barronSpline(noise.getConfiguredNoise(x, y) * 0.5f + 0.5f, curvature, middle)), 0), 255);
-                        pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
-                    }
+            for (int y = 0, idx = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    levels[idx++] = barronSpline(noise.getConfiguredNoise(x, y) * 0.5f + 0.5f, curvature, middle);
                 }
             }
         }
-        if(equalize) equalize(pm);
+        if(equalize) equalize(levels);
+        if (debug && !equalize) {
+            for (int y = 0, idx = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int v = (int) (255.999f * levels[idx++]);
+                    if (v < 0)
+                        pm.drawPixel(x, y, 0x0000FFFF);
+                    else if (v > 255)
+                        pm.drawPixel(x, y, 0xFF0000FF);
+                    else
+                        pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                }
+            }
+        }
+        else {
+            for (int y = 0, idx = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int v = Math.min(Math.max((int) (255.999f * levels[idx++]), 0), 255);
+                    pm.drawPixel(x, y, v * 0x010101 << 8 | 255);
+                }
+            }
+        }
         PixmapIO.writePNG(Gdx.files.local(output), pm);
         System.exit(0);
     }
