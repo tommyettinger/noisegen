@@ -32,7 +32,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-H", "--height"}, description = "The height of the resulting image.", defaultValue = "512")
 	public int height = 512;
 
-	@CommandLine.Option(names = {"-t", "--type"}, description = "The type of noise to generate; one of: simplex, perlin, cubic, foam, honey, mutant, value, white, cellular.", defaultValue = "white")
+	@CommandLine.Option(names = {"-t", "--type"}, description = "The type of noise to generate; one of: simplex, perlin, cubic, foam, honey, mutant, value, white, blue, cellular.", defaultValue = "white")
 	public String type = "simplex";
 
 	@CommandLine.Option(names = {"-F", "--fractal"}, description = "The fractal mode to use for most noise types; one of: fbm, billow, ridged.", defaultValue = "fbm")
@@ -62,8 +62,11 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-e", "--equalize"}, description = "If true, makes each grayscale value approximately as frequent as all other values.", defaultValue = "true")
 	public boolean equalize = false;
 
-	@CommandLine.Option(names = {"-b", "--blur"}, description = "If > 0, blurs all pixels (wrapping at the edges) outward by this distance in all directions.", defaultValue = "4.8")
+	@CommandLine.Option(names = {"-b", "--blur"}, description = "If > 0, blurs all pixels (wrapping at the edges) outward by this distance in all directions.", defaultValue = "-1.1")
 	public float blurSigma = 0f;
+
+	@CommandLine.Option(names = {"-i", "--iterations"}, description = "The number of times to repeat blur steps (and equalize if chosen).", defaultValue = "5")
+	public int iterations = 5;
 
 	public int parseType(String t) {
 		t = t.toLowerCase();
@@ -123,7 +126,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 		noise.setFractalOctaves(octaves);
 		noise.setFoamSharpness(sharpness);
 		noise.setMutation(mutation);
-		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, debug, equalize, blurSigma, output), configuration){
+		new HeadlessApplication(new NoiseGen(noise, width, height, curvature, middle, debug, equalize, blurSigma, iterations, output), configuration){
 			{
 				try {
 					mainLoopThread.join(300000L); // 5 minutes

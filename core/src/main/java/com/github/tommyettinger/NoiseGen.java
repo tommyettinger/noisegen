@@ -18,6 +18,7 @@ public class NoiseGen extends ApplicationAdapter {
     public boolean debug = true;
     public boolean equalize = true;
     public GaussianBlur blur;
+    public int iterations;
 
     public NoiseGen() {
         this(new Noise(), 512, 512);
@@ -31,7 +32,7 @@ public class NoiseGen extends ApplicationAdapter {
         height = h;
         blur = new GaussianBlur(0f);
     }
-    public NoiseGen(Noise n, int w, int h, float curvature, float middle, boolean debug, boolean equalize, float blurSigma, String out) {
+    public NoiseGen(Noise n, int w, int h, float curvature, float middle, boolean debug, boolean equalize, float blurSigma, int iterations, String out) {
         noise = n;
         width = w;
         height = h;
@@ -40,6 +41,7 @@ public class NoiseGen extends ApplicationAdapter {
         this.debug = debug;
         blur = new GaussianBlur(blurSigma);
         this.equalize = equalize;
+        this.iterations = iterations;
         output = out;
     }
     /**
@@ -117,8 +119,13 @@ public class NoiseGen extends ApplicationAdapter {
                 }
             }
         }
-        blur.filter(levels, width, height);
-        if(equalize) equalize(levels);
+        if(blur.getSigma() != 0) {
+            for (int i = 0; i < iterations; i++) {
+                blur.filter(levels, width, height);
+                if (equalize) equalize(levels);
+            }
+        }
+        else if(equalize) equalize(levels);
         if (debug && !equalize) {
             for (int y = 0, idx = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {

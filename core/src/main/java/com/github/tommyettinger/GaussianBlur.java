@@ -1,5 +1,7 @@
 package com.github.tommyettinger;
 
+import java.util.Arrays;
+
 /**
  * A small utility class to apply Gaussian blur to an array of data, usually representing a 2D field of
  * different lightness values. This is from
@@ -22,6 +24,10 @@ public class GaussianBlur {
         this.sigma = sigma;
     }
 
+    public double getSigma() {
+        return sigma;
+    }
+
     public void setSigma(double a) {
         this.sigma = a;
     }
@@ -32,16 +38,26 @@ public class GaussianBlur {
     }
 
     public float[] filter(final float[] levelData, final int width, final int height) {
-        if(sigma <= 0f) return levelData;
-
+        if(sigma == 0f) return levelData;
+        boolean flip = sigma < 0f;
+        double sigma = this.sigma * this.sigma;
         final int size = width * height;
 
         makeGaussianKernel(sigma, Math.min(width, height));
 
-        float[] temp = new float[size];
+
+        float[] temp = new float[size], original;
+        if(flip)
+            original = Arrays.copyOf(levelData, levelData.length);
+        else original = null;
         blur(levelData, temp, width, height); // H Gaussian
         blur(temp, levelData, height, width); // V Gaussian
-
+        if(flip){
+            float half = (max - min) * 0.5f;
+            for (int i = 0; i < levelData.length; i++) {
+                levelData[i] = Math.min(Math.max(original[i] - levelData[i] + half, min), max);
+            }
+        }
         return levelData;
     }
 
