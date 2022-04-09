@@ -8,24 +8,34 @@ The native-image release starts up very quickly on Windows; the JAR doesn't exac
 The options can be... uh... let's just see the nice output of -h for help.
 
 ```
-Usage: noisegen [-hV] [-c=<cellular>] [-C=<curvature>] [-f=<frequency>]
-                [-F=<fractal>] [-H=<height>] [-m=<mutation>] [-M=<middle>]
-                [-o=<output>] [-O=<octaves>] [-s=<seed>] [-S=<sharpness>]
-                [-t=<type>] [-W=<width>]
+Usage: noisegen [-dehV] [-b=<blurSigma>] [-c=<cellular>] [-C=<curvature>]
+                [-f=<frequency>] [-F=<fractal>] [-H=<height>] [-i=<iterations>]
+                [-m=<mutation>] [-M=<middle>] [-o=<output>] [-O=<octaves>]
+                [-s=<seed>] [-S=<sharpness>] [-t=<type>] [-W=<width>]
 Generate noise and write it to an image file.
+  -b, --blur=<blurSigma>    If > 0, blurs all pixels (wrapping at the edges)
+                              outward by this distance in all directions (low
+                              pass filter). If < 0, uses a high pass filter.
   -c, --cellular=<cellular> The cellular return type to use for the cellular
                               type; one of: value, lookup, distance, distance2,
                               distance2add, distance2mul, distance2div.
   -C, --curvature=<curvature>
                             How steep the transition should be from black to
                               white; must be positive.
+  -d, --debug               If true, draws higher-than-1 noise as red, and
+                              lower-than-negative-1 as blue.
+  -e, --equalize            If true, makes each grayscale value approximately
+                              as frequent as all other values.
   -f, --frequency=<frequency>
                             The frequency of the noise, with high frequency
-                              changing rapidly.
+                              changing rapidly. Usually < 1.0.
   -F, --fractal=<fractal>   The fractal mode to use for most noise types; one
                               of: fbm, billow, ridged.
   -h, --help                Show this help message and exit.
   -H, --height=<height>     The height of the resulting image.
+  -i, --iterations=<iterations>
+                            The number of times to repeat blur steps (and
+                              equalize, if both are chosen).
   -m, --mutation=<mutation> The extra 'spatial' value used by mutant noise; can
                               be any float.
   -M, --middle=<middle>     When curvature is not 1.0, this determines where
@@ -40,14 +50,13 @@ Generate noise and write it to an image file.
                               higher than one means more extreme.
   -t, --type=<type>         The type of noise to generate; one of: simplex,
                               perlin, cubic, foam, honey, mutant, value, white,
-                              cellular.
+                              blue, cellular.
   -V, --version             Print version information and exit.
-  -W, --width=<width>       The width of the resulting image.
-```
+  -W, --width=<width>       The width of the resulting image.```
 
 An example of a simple command line might be:
 ```
-java -jar noisegen-0.1.0.jar -t perlin -W 1920 -H 1080 -o PerlinNoise.png
+java -jar noisegen-0.1.2.jar -t perlin -W 1920 -H 1080 -o PerlinNoise.png
 ```
 
 This sets the type to perlin (this is "Classic Perlin," before Ken Perlin created Simplex Noise), the
@@ -55,12 +64,12 @@ width and height to 1920x1080, and the name of the output file to PerlinNoise.pn
 
 A more involved command line:
 ```
-java -jar noisegen-0.1.0.jar -t foam -F ridged -f 0.02 -W 1920 -H 1080 -s 1 -O 4 -o FoamNoise.png
+java -jar noisegen-0.1.2.jar -t foam -F ridged -f 0.02 -W 1920 -H 1080 -s 1 -O 4 -o FoamNoise.png
 ```
 
 This sets the type to foam (a high quality and organic-seeming noise), the fractal type to ridged
 (which creates lines of bright color on a darker background), the frequency to 0.02 (lower than the
-default of 0.1.025, or 1.0/32.0), the width and height to 1920x1080, the seed to 1 (so all calls with
+default of 0.03125, or 1.0/32.0), the width and height to 1920x1080, the seed to 1 (so all calls with
 the same parameters and same seed will produce the same output), the octaves to 4 (increasing detail
 over the default of 3 octaves), and the output file to FoamNoise.png .
 
@@ -73,5 +82,6 @@ and built libraries here from [his example repo](https://github.com/ByerN/libgdx
 Of course, this uses [libGDX](https://libgdx.com/); I can't get by without it.
 
 # Notes
-To build the native EXE, I drop noisegen-0.1.0.jar into `graalvm-env/`, run the appropriate Visual
-Studio variable setter (`vcvars64.bat`), then `build_native.bat`. This is all ByerN's work, big thanks!
+To build the native EXE, I drop noisegen-0.1.2.jar into `graalvm-env/`, edit paths in `build_native.bat`
+so the path to Graal's native-image.cmd and to Visual Studio's vcvarsall.bat are correct, then run
+`build_native.bat`. This is all ByerN's work, big thanks!

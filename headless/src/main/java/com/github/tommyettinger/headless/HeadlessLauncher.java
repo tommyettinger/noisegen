@@ -1,6 +1,5 @@
 package com.github.tommyettinger.headless;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.math.MathUtils;
@@ -17,7 +16,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 
 	public Noise noise = new Noise();
 
-	@CommandLine.Option(names = {"-f", "--frequency"}, description = "The frequency of the noise, with high frequency changing rapidly.", defaultValue = "0.03125")
+	@CommandLine.Option(names = {"-f", "--frequency"}, description = "The frequency of the noise, with high frequency changing rapidly. Usually < 1.0.", defaultValue = "0.03125")
 	public float frequency = 0x1p-5f;
 
 	@CommandLine.Option(names = {"-s", "--seed"}, description = "The seed that determines how the noise will form using the given parameters.")
@@ -32,7 +31,7 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-H", "--height"}, description = "The height of the resulting image.", defaultValue = "512")
 	public int height = 512;
 
-	@CommandLine.Option(names = {"-t", "--type"}, description = "The type of noise to generate; one of: simplex, perlin, cubic, foam, honey, mutant, value, white, blue, cellular.", defaultValue = "white")
+	@CommandLine.Option(names = {"-t", "--type"}, description = "The type of noise to generate; one of: simplex, perlin, cubic, foam, honey, mutant, value, white, blue, cellular.", defaultValue = "simplex")
 	public String type = "simplex";
 
 	@CommandLine.Option(names = {"-F", "--fractal"}, description = "The fractal mode to use for most noise types; one of: fbm, billow, ridged.", defaultValue = "fbm")
@@ -59,13 +58,14 @@ public class HeadlessLauncher implements Callable<Integer> {
 	@CommandLine.Option(names = {"-d", "--debug"}, description = "If true, draws higher-than-1 noise as red, and lower-than-negative-1 as blue.", defaultValue = "false")
 	public boolean debug = false;
 
-	@CommandLine.Option(names = {"-e", "--equalize"}, description = "If true, makes each grayscale value approximately as frequent as all other values.", defaultValue = "true")
+	@CommandLine.Option(names = {"-e", "--equalize"}, description = "If true, makes each grayscale value approximately as frequent as all other values.", defaultValue = "false")
 	public boolean equalize = false;
 
-	@CommandLine.Option(names = {"-b", "--blur"}, description = "If > 0, blurs all pixels (wrapping at the edges) outward by this distance in all directions.", defaultValue = "-1.1")
+	@CommandLine.Option(names = {"-b", "--blur"}, description = "If > 0, blurs all pixels (wrapping at the edges) outward by this distance in all directions (low pass filter)." +
+			" If < 0, uses a high pass filter.", defaultValue = "0")
 	public float blurSigma = 0f;
 
-	@CommandLine.Option(names = {"-i", "--iterations"}, description = "The number of times to repeat blur steps (and equalize if chosen).", defaultValue = "5")
+	@CommandLine.Option(names = {"-i", "--iterations"}, description = "The number of times to repeat blur steps (and equalize, if both are chosen).", defaultValue = "5")
 	public int iterations = 5;
 
 	public int parseType(String t) {
