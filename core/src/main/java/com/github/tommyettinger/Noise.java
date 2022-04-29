@@ -980,12 +980,13 @@ public class Noise {
         switch (noiseType) {
             case BLUE_NOISE: {
 //                return (BlueNoise.getSeeded(Math.round(x), Math.round(y), seed) + 0.5f) / 127.5f;
-                int ix = Math.round(x), iy = Math.round(y);
-                return (
-                        (BlueNoise.getSeeded(ix, iy, seed) + 128 << 16) |
-                        (BlueNoise.getSeeded(ix + 11, iy + 11, ~seed) + 128 << 8) |
-                        (BlueNoise.getSeeded(ix - 23, iy - 23, seed ^ 0x9E3779B9) + 128))
-                        / 0xFFFFFFp-1f - 1f;
+                int ix = Math.round(x), iy = Math.round(y), b = BlueNoise.getSeeded(ix, iy, seed) & 255;
+                return (b << 16 | b << 8 | b) / 0xFFFFFFp-1f - 1f;
+//                return (
+//                        (BlueNoise.getSeeded(ix, iy, seed) + 128 << 16) |
+//                        (BlueNoise.getSeeded(ix, iy, ~seed) + 128 << 8) |
+//                        (BlueNoise.getSeeded(ix, iy, seed ^ 0x9E3779B9) + 128))
+//                        / 0xFFFFFFp-1f - 1f;
             }
             case VALUE:
                 return singleValue(seed, x, y);

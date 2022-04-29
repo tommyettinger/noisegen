@@ -104,8 +104,15 @@ public class NoiseGen extends ApplicationAdapter {
     @Override
     public void create() {
         Pixmap pm = new Pixmap(width, height, Pixmap.Format.RGB888);
+//        Pixmap blue = new Pixmap(Gdx.files.internal("BlueNoiseOmniTiling8x8.png"));
         float[] levels = new float[width * height];
         if(curvature == 1f) {
+
+//            for (int y = 0, idx = 0; y < height; y++) {
+//                for (int x = 0; x < width; x++) {
+//                    levels[idx++] = ((blue.getPixel(x, y) >> 24) + 128) / 255f;
+//                }
+//            }
             for (int y = 0, idx = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     levels[idx++] = noise.getConfiguredNoise(x, y) * 0.5f + 0.5f;

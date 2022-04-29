@@ -3,6 +3,7 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 mainClassName = 'com.github.tommyettinger.headless.HeadlessLauncher'
 eclipse.project.name = appName + '-headless'
+sourceSets.main.resources.srcDirs = [file('../assets').path]
 
 dependencies {
 	implementation project(':core')
