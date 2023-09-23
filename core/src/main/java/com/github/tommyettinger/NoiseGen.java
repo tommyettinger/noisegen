@@ -69,7 +69,7 @@ public class NoiseGen extends ApplicationAdapter {
     /**
      * Equalizes the lightness for a grayscale image, attempting to ensure that the darkest color is black
      * and the lightest color is white, with grays in-between evenly distributed. Modifies its argument in-place.
-     * @param pm a Pixmap that will be modified in-place
+     * @param pm a float array representing 2D lightness data (row-major) that will be modified in-place
      */
     public void equalize(float[] pm)
     {

@@ -38,8 +38,8 @@ public class GaussianBlur {
     }
 
     public float[] filter(final float[] levelData, final int width, final int height) {
-        if(sigma == 0f) return levelData;
-        boolean flip = sigma < 0f;
+        if(sigma == 0.0) return levelData;
+        boolean flip = sigma < 0.0;
         double sigma = this.sigma * this.sigma;
         final int size = width * height;
 
